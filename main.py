@@ -1,9 +1,16 @@
+# Comando para inicializar la api  uvicorn main:app --reload
+# --reload es un comando que nos permite visualizar los cambios en la api de forma automatica,
+#  sin la necesidad de recargar
+
+
 # Python
+from operator import le
 from typing import Optional # Sirve para definir tipos de datos en python y volver a python como un lenguaje de programación estatico
+from enum import Enum
 
 #Pydantic
 from pydantic import BaseModel # Sirve para definir los modelos de datos que se usaran en la aplicacion
-
+from pydantic import Field
 # FastAPI
 from fastapi import FastAPI  # Sirve para definir la API de la aplicacion
 from fastapi import Body, Query, Path # Sirve para definir el tipo de dato que se usara en la API
@@ -12,6 +19,13 @@ from fastapi import Body, Query, Path # Sirve para definir el tipo de dato que s
 app = FastAPI()
 
 #models
+class HairColor(str, Enum):
+    white =  "white"
+    brown = "brown"
+    black = "black"
+    blonde = "blonde"
+    red = "red"
+
 class Location(BaseModel):
     city : str
     state: str
@@ -19,11 +33,23 @@ class Location(BaseModel):
 
 
 class Person(BaseModel):
-    first_name: str
-    last_name: str
-    age: int
-    hair_colo: Optional[str] = None
-    is_married: Optional[bool] = None 
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
+    age: int = Field(
+        ...,
+        gt=0,
+        le=115
+    )
+    hair_colo: Optional[HairColor] = Field(default=None)
+    is_married: Optional[bool] = Field(default=None)
 
 @app.get("/")
 def home():
