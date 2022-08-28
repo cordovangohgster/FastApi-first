@@ -31,25 +31,49 @@ class Location(BaseModel):
     state: str
     country:str
 
+    class Config:
+       schema_extra = {
+            "example" : {
+                "city": "Barinas",
+                "state": "San Francisco",
+                "country": "United States"
+            }
+       }
+
 
 class Person(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example = "juana montilla"
         )
     last_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example = "montenegro"
     )
     age: int = Field(
         ...,
         gt=0,
-        le=115
+        le=115,
+        example = 23
     )
-    hair_colo: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+    hair_colo: Optional[HairColor] = Field(default=None, example=HairColor.black)
+    is_married: Optional[bool] = Field(default=None, example=False)
+
+    #para que funcione con dos body se le coloca example
+    #class Config:
+    #    schema_extra = {
+    #        "example": {
+    #            "first_name": "Rodrigo",
+    #            "last_name": "Lopez",
+    #            "age": 30,
+    #            "hair_color": "black",
+    #            "is_married": False
+    #        }
+    #    }
 
 @app.get("/")
 def home():
