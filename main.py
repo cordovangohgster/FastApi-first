@@ -94,13 +94,15 @@ def show_person(
         min_length=1, 
         max_length=50,
         title="Person Name", # solo para documentación
-        Description="The person name" # solo para documentación
+        Description="The person name", # solo para documentación
+        example ="Rocío" # esto es un query example
         ),
     #age: Optional[int] = Query()
     age: str = Query(
         ..., 
         title="Person Age", 
-        description="The age of the person"
+        description="The age of the person",
+        example = 25
         ) # como ejemplo se pide que sea obligatorio pero los qry params son opcionales
 ):
     return {name : age}
@@ -108,7 +110,7 @@ def show_person(
 # vAlidations path parameters
 @app.get("/person/detail/{person_id}")
 def show_person(
-    person_id: int = '..., gt=0'
+    person_id: int = '..., gt=0, example=123'
 ):
     return {person_id : "it exits"}
 
